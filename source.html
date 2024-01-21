@@ -1,22 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="stylesheet.css">
-    <script src="test.js"></script>
-    <div class="square">
-        
-        <ul class="ds">
-           
-            <li><button onclick='alert("hi");''>save</button></li>
-            <li><button>file</button></li>
-            <li><button onclick="">Run</button></li>
-            
-        </ul>
-        <textarea name="lol" id="" cols="40" rows="10"></textarea> 
-    </div>
+    <style>
+        body {
+            background-color: #f0f0f0;
+        }
+        #uiContainer {
+            background-color: #d3d3d3;
+            padding: 20px;
+            margin: 20px;
+            display: inline-block;
+        }
+    </style>
 </head>
 <body>
-    
-    
+    <div id="uiContainer">
+        <h2>Local Host Runner</h2>
+        <div class="square">
+            <ul class="ds">
+                <li>
+                    <label for="mediaType">Select Media Type:</label>
+                    <select id="mediaType">
+                        <option value="text/html">HTML</option>
+                        <option value="text/plain">Plain Text</option>
+                        <option value="image/jpeg">Image (JPEG)</option>
+                      
+                    </select>
+                </li>
+                <li><button onclick="runCode()">Run</button></li>
+            </ul>
+            <textarea id="codeTextarea" name="lol" cols="40" rows="10"></textarea> 
+        </div>
+    </div>
+
+    <script>
+        function runCode() {
+            var codeTextarea = document.getElementById("codeTextarea");
+            var code = codeTextarea.value;
+            var mediaType = document.getElementById("mediaType").value;
+
+            // Create a Blob object from the code
+            var blob = new Blob([code], { type: mediaType });
+
+            // Create a Blob URL
+            var blobUrl = URL.createObjectURL(blob);
+
+            // Open the Blob URL in a new tab
+            var newTab = window.open();
+            newTab.document.write('<html><head><title>Result</title></head><body>');
+            newTab.document.write('<h2>Result</h2>');
+            newTab.document.write('<button onclick="window.close()">Close</button>');
+            newTab.document.write('<iframe width="500px" height="500px" src="' + blobUrl + '" frameborder="0"></iframe>');
+            newTab.document.write('</body></html>');
+            newTab.document.close();
+        }
+    </script>
 </body>
 </html>
