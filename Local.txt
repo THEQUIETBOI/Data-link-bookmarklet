@@ -101,5 +101,5 @@ WIN.document.close();
   </body>
 </html>
 
-; var newWindow = window.open('', '_blank');
+'; var newWindow = window.open('', '_blank');
 newWindow.document.write(code); newWindow.document.close();})();
