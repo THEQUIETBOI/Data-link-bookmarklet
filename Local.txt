@@ -1,40 +1,105 @@
 javascript:(function() { var code = ` 
     <html lang="en">
-
-<head>
+  <head>
     <style>
-        body {
-            background-color: #f0f0f0;
-        }
-
-        #uiContainer {
-            background-color: #d3d3d3;
-            padding: 20px;
-            margin: 20px;
-            display: inline-block;
-        }
+      body {
+        background-color: #f0f0f0;
+        margin: 0; /* Reset margin to ensure full width */
+      }
+      #uiContainer {
+        background-color: #d3d3d3;
+        padding: 20px;
+        display: fit-content; /* Use flexbox for layout */
+        flex-direction: row; /* Arrange children in a row */
+        justify-content: space-between; /* Distribute space between elements */
+        width: fit-content;
+        height: fit-content;
+      }
+  
+      #additionalSquare {
+        background-color: #ddd;
+        width: fit-content;
+        height: fit-content;
+        padding: 20px;
+        margin-top: 20px;
+        float: right;
+      }
     </style>
-</head>
-
-<body>
+  </head>
+  <body>
+  <div id="additionalSquare">
+    <li>
+     <input type="text" placeholder="Enter URL" id="URL">   
+     <button onclick="openTab()">Open</button>
+    </li>
+    
+  </div>
     <div id="uiContainer">
-        <h2>Local Host Runner</h2>
-        <div class="square">
-            <ul class="ds">
-                <li> <label for="mediaType">Select Media Type:</label> <select id="mediaType">
-                        <option value="text/html">HTML</option>
-                        <option value="text/plain">Plain Text</option>
-                        <option value="image/jpeg">Image (JPEG)</option>
-                    </select> </li>
-                <li> <button onclick="runCode()">Run</button> </li>
-            </ul>
-            <textarea id="codeTextarea" name="lol" cols="40" rows="10"></textarea>
-        </div>
+      <div class="square">
+        <ul class="ds">
+          <li>
+            <label for="mediaType">Select Media Type:</label>
+            <select id="mediaType">
+              <option value="text/html">HTML</option>
+              <option value="text/plain">Plain Text</option>
+              <option value="image/jpeg">Image (JPEG)</option>
+            </select>
+            
+          </li>
+          <li>
+            <button onclick="runCode()">Run</button>
+            More Secure<input type="checkbox" name="Base64" id="base64Checkbox"> 
+          </li>
+        </ul>
+        <textarea id="codeTextarea" name="lol" cols="40" rows="10"></textarea>
+      </div>
     </div>
-    <script>          function runCode() { var codeTextarea = document.getElementById("codeTextarea"); var code = codeTextarea.value; var mediaType = document.getElementById("mediaType").value; var blob = new Blob([code], { type: mediaType }); var blobUrl = URL.createObjectURL(blob); var newWindow = window.open("", "_blank"); newWindow.document.write("<html><head><title>Result</title></head><body>"); newWindow.document.write("<h2>Result</h2>"); newWindow.document.write('<button onclick="window.close()">Close</button>'); newWindow.document.write('<iframe width="100%" height="100%^" src="' + blobUrl + '" frameborder="0"></iframe>'); newWindow.document.write("</body></html>"); newWindow.document.close(); }        </script>
-    <script>          window.runCode = runCode;        </script>
-</body>
+    <script>
+        function openTab() {
+            var text = document.getElementById("URL");
+var URL = text.value;
+var WIN = window.open("", "_blank");
+WIN.document.write("<html><head><title>Result</title></head><body>");
+WIN.document.write('<button onclick="window.close()">Close</button>');
+WIN.document.write('<iframe width="fit-content" height="fit-content" src="' + URL + '" frameborder="0"></iframe>');
+WIN.document.write("</body></html>");
+WIN.document.close();
 
-</html> 
+
+        }
+    </script>
+    <script>
+      function runCode() {
+        var codeTextarea = document.getElementById("codeTextarea");
+        var code = codeTextarea.value;
+        var mediaType = document.getElementById("mediaType").value;
+        var base64Checkbox = document.getElementById("base64Checkbox");
+
+        if (base64Checkbox.checked) {
+          // Encode the textarea value to base64
+          code = btoa(code);
+          mediaType = "text/plain"; // Change media type to plain text for base64 content
+        }
+
+        var blob = new Blob([code], { type: mediaType });
+        var blobUrl = URL.createObjectURL(blob);
+        var newWindow = window.open("", "_blank");
+        newWindow.document.write("<html><head><title>Result</title></head><body>");
+        newWindow.document.write("<h2>Result</h2>");
+        newWindow.document.write('<button onclick="window.close()">Close</button>');
+        newWindow.document.write('<iframe width="100%" height="100%" src="' + blobUrl + '" frameborder="0"></iframe>');
+        newWindow.document.write("</body></html>");
+        newWindow.document.close();
+      }
+    </script>
+    <script>
+      window.runCode = runCode;
+    </script>
+    <script>
+        WIN.window.openTab = openTab;
+    </script>
+  </body>
+</html>
+
 ; var newWindow = window.open('', '_blank');
 newWindow.document.write(code); newWindow.document.close();})();
